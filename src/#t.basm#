@@ -1,0 +1,15 @@
+extern println
+
+name:
+ ""
+
+greet:
+  call println
+
+wname: "world"
+load r0 @wname
+call greet
+
+/*
+
+*/

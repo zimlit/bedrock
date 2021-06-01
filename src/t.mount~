@@ -1,0 +1,11 @@
+let IO = "IO" import
+
+let greeter = obj
+  name = ""
+  greet = fn(self)
+    IO.println(self.name)
+  end
+end
+
+let world = greeter clone
+world greet
