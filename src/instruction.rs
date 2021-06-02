@@ -1,4 +1,6 @@
-#[derive(Debug, PartialEq)]
+use nom::types::CompleteStr;
+
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum Opcode {
     Hlt,
     Load,
@@ -16,6 +18,10 @@ pub enum Opcode {
     Jlt,
     Jgq,
     Jlq,
+    Write,
+    WritePtr,
+    Loadptr,
+    Deref,
     Igl,
 }
 
@@ -26,7 +32,7 @@ pub struct Instruction {
 
 impl Instruction {
     pub fn new(opcode: Opcode) -> Instruction {
-        Instruction { opcode: opcode }
+        Instruction { opcode }
     }
 }
 
@@ -49,7 +55,38 @@ impl From<u8> for Opcode {
 	    13 => return Opcode::Jlt,
 	    14 => return Opcode::Jgq,
 	    15 => return Opcode::Jlq,
+	    16 => return Opcode::Write,
+	    17 => return Opcode::WritePtr,
+	    18 => return Opcode::Loadptr,
+	    19 => return Opcode::Deref,
 	    _ => return Opcode::Igl,
+        }
+    }
+}
+impl<'a> From<CompleteStr<'a>> for Opcode {
+    fn from(v: CompleteStr<'a>) -> Self {
+        match v {
+            CompleteStr("load") => Opcode::Load,
+            CompleteStr("add") => Opcode::Add,
+            CompleteStr("sub") => Opcode::Sub,
+            CompleteStr("mul") => Opcode::Mul,
+            CompleteStr("div") => Opcode::Div,
+            CompleteStr("hlt") => Opcode::Hlt,
+            CompleteStr("jmp") => Opcode::Jmp,
+            CompleteStr("jmpf") => Opcode::Jmpf,
+            CompleteStr("jmpb") => Opcode::Jmpb,
+	    CompleteStr("cmp") => Opcode::Cmp,
+	    CompleteStr("jeq") => Opcode::Jeq,
+	    CompleteStr("jne") => Opcode::Jne,
+	    CompleteStr("jgt") => Opcode::Jgt,
+	    CompleteStr("jlt") => Opcode::Jlt,
+	    CompleteStr("jgq") => Opcode::Jgq,
+	    CompleteStr("jlq") => Opcode::Jlq,
+	    CompleteStr("write") => Opcode::Write,
+	    CompleteStr("writeptr") => Opcode::WritePtr,
+	    CompleteStr("loadptr") => Opcode::Loadptr,
+	    CompleteStr("deref") => Opcode::Deref,
+            _ => Opcode::Igl,
         }
     }
 }
